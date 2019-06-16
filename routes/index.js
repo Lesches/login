@@ -1,7 +1,13 @@
 var express = require('express');
 var router = express.Router();
 let rando = require('random-words');
+let jwt = require('jsonwebtoken')
+require('dotenv').config();
 
+router.get('/secret', (req, res) => {
+    res.send({secret: process.env.SECRET})
+
+});
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -32,6 +38,22 @@ router.post('/word', (req, res) =>{
   let word = rando(1);
       res.send({word: 'Trump'});
     }
-)
+);
+
+router.post('/login', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    // verify username and password, create and return token
+    if (username === 'fred' && password === process.env.PASSWORD) {
+    let token =  jwt.sign({username: username},
+            process.env.SECRET,
+            {expiresIn: '10 minutes'});
+        res.send({token: token})
+    }
+    else {
+        res.send({error: "Invalid login credentials"})
+
+    }
+});
 
 module.exports = router;
