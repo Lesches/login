@@ -13,11 +13,21 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/word', (req, res) =>{
-  let word = rando(1);
-  res.send({word: word});
+router.get('/word', (req, res) => {
+    let token = req.query.token;
+    try {
+        jwt.verify(
+            token, process.env.SECRET
+        )
+        let word = rando(1);
+        res.send({word: word});
+
+    } catch (err) {
+        res.send({error: "invalid token", details: err});
     }
-);
+
+
+});
 
 router.get('/words/:count', (req, res) =>{
   let count = Number(req.params.count);
