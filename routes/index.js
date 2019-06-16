@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let rando = require('random-words');
-let jwt = require('jsonwebtoken')
+let jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 router.get('/secret', (req, res) => {
